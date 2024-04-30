@@ -1,7 +1,6 @@
 package models;
 
-public class Patient {
-    private int id;
+public class Patient extends GenericObjectModel{
     private String firstName;
     private String middleName;
     private String lastName;
@@ -16,14 +15,6 @@ public class Patient {
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getFirstName() {

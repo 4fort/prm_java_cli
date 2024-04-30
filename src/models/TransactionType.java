@@ -1,22 +1,9 @@
 package models;
 
-public class TransactionType {
-    private int id;
+public class TransactionType extends GenericObjectModel{
     private String type;
 
     public TransactionType(){}
-    public TransactionType(int id, String type) {
-        this.id = id;
-        this.type = type;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getType() {
         return type;

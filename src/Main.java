@@ -57,8 +57,8 @@ public class Main {
                 TransactionType transactionType = new TransactionType();
                 Patient patient = new Patient();
 
+                System.out.println("\n\nAdd New Patient Record");
                 displayTransactionTypes(transactionType);
-                System.out.println("Add New Patient Record");
 
                 scanPatientDetails(patient);
 
@@ -89,6 +89,7 @@ public class Main {
             System.out.println(e.getMessage());
             main(null);
         }
+        main(null);
     }
 
     public static void updatePatientRecord() throws Exception {
@@ -100,8 +101,8 @@ public class Main {
                 Patient patient = new Patient();
                 boolean newPatient;
 
+                System.out.println("\n\nUpdate Existing Patient Record");
                 displayTransactionTypes(transactionType);
-                System.out.println("Update Existing Patient Record");
                 System.out.println("Display Patient Records? [Y/N]");
                 scanner.nextLine();
                 System.out.print("> ");
@@ -148,10 +149,10 @@ public class Main {
                     }
                 }
 
-                System.out.print("Enter Patient Remarks: ");
-                transaction.setRemarks(scanner.next());
-                System.out.print("Enter Patient Findings: ");
-                transaction.setFindings(scanner.next());
+                System.out.println("Enter Patient Remarks: ");
+                transaction.setRemarks(scanner.nextLine());
+                System.out.println("Enter Patient Findings: ");
+                transaction.setFindings(scanner.nextLine());
 
                 transaction.setTransactionType(transactionType);
                 transaction.setPatient(patient);
@@ -171,6 +172,7 @@ public class Main {
             main(null);
             throw new Exception(e);
         }
+        main(null);
     }
 
 
@@ -260,7 +262,7 @@ public class Main {
 
         while(true) {
             try {
-                System.out.println("\n\nSelect Transaction Type");
+                System.out.println("Select Transaction Type");
                 for (TransactionType type : transactionTypes) {
                     System.out.println(type.getId() + ". " + type.getType());
                 }

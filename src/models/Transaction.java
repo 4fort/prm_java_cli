@@ -2,21 +2,12 @@ package models;
 
 import java.util.Date;
 
-public class Transaction {
-    private int id;
+public class Transaction extends GenericObjectModel{
     private TransactionType type;
     private Patient patient;
     private String remarks;
     private String findings;
     private String date;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public TransactionType getTransactionType() {
         return type;
