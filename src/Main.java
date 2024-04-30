@@ -62,10 +62,11 @@ public class Main {
 
                 scanPatientDetails(patient);
 
-                System.out.print("Enter Patient Remarks: ");
-                transaction.setRemarks(scanner.next());
-                System.out.print("Enter Patient Findings: ");
-                transaction.setFindings(scanner.next());
+                System.out.println("Enter Patient Remarks: ");
+                scanner.nextLine();
+                transaction.setRemarks(scanner.nextLine());
+                System.out.println("Enter Patient Findings: ");
+                transaction.setFindings(scanner.nextLine());
 
                 transaction.setTransactionType(transactionType);
                 transaction.setPatient(patient);
@@ -80,7 +81,7 @@ public class Main {
                 } else {
                     System.out.println("Failed to add Patient Record");
                 }
-
+                scanner.nextLine();
             } while (!isQuit());
         } catch (Exception e) {
             System.out.println("Something went wrong, please try again. ");
@@ -164,6 +165,7 @@ public class Main {
                 } else {
                     System.out.println("Failed to add Patient Record");
                 }
+                scanner.nextLine();
             } while (!isQuit());
         } catch (Exception e) {
             main(null);
@@ -190,10 +192,12 @@ public class Main {
                 } else {
                     System.out.println("Failed to Delete Patient Record");
                 }
+                scanner.nextLine();
             } while (!isQuit());
         } catch (Exception e) {
             throw new Exception(e);
         }
+        main(null);
     }
 
     public static void viewPatientRecord() throws Exception {
