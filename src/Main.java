@@ -5,6 +5,8 @@ import interfaces.impl.TransactionTypesDBActionImpl;
 import models.Patient;
 import models.Transaction;
 import models.TransactionType;
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,6 +39,7 @@ public class Main {
                     break;
                 case "4":
                     viewPatientRecord();
+                    scanner.nextLine();
                     break;
                 case "5":
                     viewAllPatientRecord();
@@ -81,7 +84,6 @@ public class Main {
                 } else {
                     System.out.println("Failed to add Patient Record");
                 }
-                scanner.nextLine();
             } while (!isQuit());
         } catch (Exception e) {
             System.out.println("Something went wrong, please try again. ");
@@ -120,7 +122,7 @@ public class Main {
 
                 while (true) {
                     try{
-                        System.out.println("1. Enter new patient details");
+                        System.out.println("1. Create new patient details");
                         System.out.println("2. Select existing patient by ID");
                         System.out.print("> ");
 
@@ -165,7 +167,6 @@ public class Main {
                 } else {
                     System.out.println("Failed to add Patient Record");
                 }
-                scanner.nextLine();
             } while (!isQuit());
         } catch (Exception e) {
             main(null);
@@ -200,21 +201,23 @@ public class Main {
         main(null);
     }
 
-    public static void viewPatientRecord() throws Exception {
+    public static void viewPatientRecord(){
         try {
             System.out.println("\n\nView Patient Record");
             System.out.println("=================================");
-            System.out.println("Enter Record ID: ");
+            System.out.print("Enter Record ID: ");
             TransactionDBActionImpl transactionDBActionImpl = new TransactionDBActionImpl();
             TransactionAction transactionAction = new TransactionActionImpl();
-            transactionAction.displayDetails(transactionDBActionImpl.get(scanner.nextInt()));
 
+            int input = scanner.nextInt();
+            if(!transactionDBActionImpl.verifyTransaction(input)){throw new Exception("Record does not exist");}
+            transactionAction.displayDetails(transactionDBActionImpl.get(input));
         } catch (Exception e) {
-            throw new Exception(e);
+            System.out.println(e.getMessage());
         }
     }
 
-    public static void viewAllPatientRecord() throws Exception {
+    public static void viewAllPatientRecord(){
         try {
             System.out.println("\n\nView All Patient Record");
             System.out.println("=================================");
@@ -225,7 +228,7 @@ public class Main {
                 transactionAction.displayDetails(transaction);
             }
         } catch (Exception e) {
-            throw new Exception(e);
+            System.out.println(e.getMessage());
         }
     }
 
