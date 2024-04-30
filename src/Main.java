@@ -77,10 +77,8 @@ public class Main {
                     TransactionAction transactionAction = new TransactionActionImpl();
                     System.out.println("\n\nPatient Record Added Successfully!");
                     transactionAction.displayDetails(createdTransaction);
-                    scanner.nextLine();
                 } else {
                     System.out.println("Failed to add Patient Record");
-                    scanner.nextLine();
                 }
 
             } while (!isQuit());
@@ -150,6 +148,7 @@ public class Main {
                 }
 
                 System.out.println("Enter Patient Remarks: ");
+                scanner.nextLine();
                 transaction.setRemarks(scanner.nextLine());
                 System.out.println("Enter Patient Findings: ");
                 transaction.setFindings(scanner.nextLine());
@@ -162,10 +161,8 @@ public class Main {
                     TransactionAction transactionAction = new TransactionActionImpl();
                     System.out.println("\n\nPatient Record Added Successfully!");
                     transactionAction.displayDetails(updatedTransaction);
-                    scanner.nextLine();
                 } else {
                     System.out.println("Failed to add Patient Record");
-                    scanner.nextLine();
                 }
             } while (!isQuit());
         } catch (Exception e) {
@@ -190,10 +187,8 @@ public class Main {
                 TransactionDBActionImpl transactionDBActionImpl = new TransactionDBActionImpl();
                 if (transactionDBActionImpl.delete(scanner.nextInt())) {
                     System.out.println("Patient Record Deleted Successfully");
-                    scanner.nextLine();
                 } else {
                     System.out.println("Failed to Delete Patient Record");
-                    scanner.nextLine();
                 }
             } while (!isQuit());
         } catch (Exception e) {
