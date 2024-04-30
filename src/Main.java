@@ -23,7 +23,7 @@ public class Main {
             System.out.println("4. View Patient Record");
             System.out.println("5. View All Patient Record");
 
-            System.out.print("Select Transaction: ");
+            System.out.print("> ");
 
             switch(scanner.nextLine()){
                 case "1":
@@ -42,7 +42,7 @@ public class Main {
                     viewAllPatientRecord();
                     break;
                 default:
-                    System.out.println("Select only from options below");
+                    System.out.println("\n\n\nSelect only from options below");
                     continue;
             }
 
@@ -77,13 +77,17 @@ public class Main {
                     TransactionAction transactionAction = new TransactionActionImpl();
                     System.out.println("\n\nPatient Record Added Successfully!");
                     transactionAction.displayDetails(createdTransaction);
+                    scanner.nextLine();
                 } else {
                     System.out.println("Failed to add Patient Record");
+                    scanner.nextLine();
                 }
 
             } while (!isQuit());
         } catch (Exception e) {
-            throw new Exception(e);
+            System.out.println("Something went wrong, please try again. ");
+            System.out.println(e.getMessage());
+            main(null);
         }
     }
 
@@ -227,10 +231,30 @@ public class Main {
         TransactionTypesDBActionImpl transactionTypesImpl = new TransactionTypesDBActionImpl();
         List<TransactionType> transactionTypes = transactionTypesImpl.getAll();
 
-        System.out.println("Select Transaction Type");
-        for (TransactionType type : transactionTypes) {
-            System.out.println(type.getId() + " " + type.getType());
+        while(true) {
+            try {
+                System.out.println("\n\nSelect Transaction Type");
+                for (TransactionType type : transactionTypes) {
+                    System.out.println(type.getId() + ". " + type.getType());
+                }
+                System.out.println(transactionTypes.size() + 1 + ". Cancel");
+
+                System.out.print("> ");
+                int input = scanner.nextInt();
+                if (input == transactionTypes.size() + 1) {
+                    scanner.nextLine();
+                    System.out.println("Transaction Canceled\n\n");
+                    main(null);
+                } else if(input < 1 || input > transactionTypes.size()){
+                    throw new Exception("Invalid Input");
+                } else {
+                    transactionType.setId(input);
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
         }
-        transactionType.setId(scanner.nextInt());
     }
 }
