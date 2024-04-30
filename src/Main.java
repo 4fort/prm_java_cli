@@ -92,6 +92,7 @@ public class Main {
     }
 
     public static void updatePatientRecord() throws Exception {
+        TransactionDBActionImpl transactionDBActionImpl = new TransactionDBActionImpl();
         try {
             do {
                 Transaction transaction = new Transaction();
@@ -102,25 +103,48 @@ public class Main {
                 displayTransactionTypes(transactionType);
                 System.out.println("Update Existing Patient Record");
                 System.out.println("Display Patient Records? [Y/N]");
+                scanner.nextLine();
+                System.out.print("> ");
                 if (scanner.nextLine().equalsIgnoreCase("Y")) {
                     viewAllPatientRecord();
                 }
 
-                System.out.print("Enter Record ID: ");
-                transaction.setId(scanner.nextInt());
+                while (true) {
+                    System.out.print("Enter Record ID: ");
+                    transaction.setId(scanner.nextInt());
+                    if(transactionDBActionImpl.verifyTransaction(transaction.getId())) {
+                        break;
+                    }
+                    else {System.out.println("\n\nRecord does not exist");}
+                }
 
                 while (true) {
-                    System.out.println("1. Enter new patient details");
-                    System.out.println("2. Select existing patient by ID");
-                    if (scanner.nextInt() == 1) {
-                        scanPatientDetails(patient);
-                        newPatient = true;
-                        break;
-                    } else if (scanner.nextInt() == 2) {
-                        System.out.print("Enter Patient ID: ");
-                        patient.setId(scanner.nextInt());
-                        newPatient = false;
-                        break;
+                    try{
+                        System.out.println("1. Enter new patient details");
+                        System.out.println("2. Select existing patient by ID");
+                        System.out.print("> ");
+
+                        int input = scanner.nextInt();
+                        if(input < 1 || input > 2) throw new Exception("Invalid Input");
+                        else if (input == 1) {
+                            scanPatientDetails(patient);
+                            newPatient = true;
+                            break;
+                        } else if (input == 2) {
+                            while (true) {
+                                System.out.print("Enter Patient ID: ");
+                                patient.setId(scanner.nextInt());
+                                if(transactionDBActionImpl.verifyPatient(patient.getId())) {
+                                    break;
+                                }
+                                else {System.out.println("\n\nRecord does not exist");}
+                            }
+                            newPatient = false;
+                            break;
+                        }
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
                     }
                 }
 
@@ -132,16 +156,19 @@ public class Main {
                 transaction.setTransactionType(transactionType);
                 transaction.setPatient(patient);
 
-                TransactionDBActionImpl transactionDBActionImpl = new TransactionDBActionImpl();
-                if (transactionDBActionImpl.update(transaction, newPatient)) {
+                Transaction updatedTransaction = transactionDBActionImpl.update(transaction, newPatient);
+                if (updatedTransaction != null) {
                     TransactionAction transactionAction = new TransactionActionImpl();
-                    transactionAction.displayDetails(transaction);
-                    System.out.println("Patient Record Updated Successfully");
+                    System.out.println("\n\nPatient Record Added Successfully!");
+                    transactionAction.displayDetails(updatedTransaction);
+                    scanner.nextLine();
                 } else {
-                    System.out.println("Failed to Update Patient Record");
+                    System.out.println("Failed to add Patient Record");
+                    scanner.nextLine();
                 }
             } while (!isQuit());
         } catch (Exception e) {
+            main(null);
             throw new Exception(e);
         }
     }

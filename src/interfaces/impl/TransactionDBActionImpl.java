@@ -122,8 +122,10 @@ public class TransactionDBActionImpl implements TransactionDBAction {
 
             ResultSet generatedKeys = stmt.getGeneratedKeys();
             if (generatedKeys.next()) {
+                int id = generatedKeys.getInt(1);
+                System.out.println(id);
                 conn.commit();
-                return get(generatedKeys.getInt(1));
+                return get(id);
             } else {
                 return null;
             }
@@ -170,7 +172,7 @@ public class TransactionDBActionImpl implements TransactionDBAction {
     }
 
     @Override
-    public boolean update(Transaction transaction, boolean newPatient) {
+    public Transaction update(Transaction transaction, boolean newPatient) {
         Connection conn = DBConnection.connectToDB();
         try {
             conn.setAutoCommit(false);
@@ -185,17 +187,22 @@ public class TransactionDBActionImpl implements TransactionDBAction {
             }
             stmt.setString(3, transaction.getRemarks());
             stmt.setString(4, transaction.getFindings());
+            stmt.setInt(5, transaction.getId());
 
-            if(stmt.executeUpdate() == 1) {
+            if (stmt.executeUpdate() > 0) {
                 conn.commit();
-                return true;
+                return get(transaction.getId());
+            } else {
+                conn.rollback();
+                return null;
             }
         } catch (SQLException e) {
             try {
                 conn.rollback();
             } catch (SQLException ex) {
-                System.out.println(ex);
+                System.out.println(ex.getMessage());
             }
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } finally {
             if (conn != null) {
@@ -203,11 +210,10 @@ public class TransactionDBActionImpl implements TransactionDBAction {
                     conn.setAutoCommit(true);
                     conn.close();
                 } catch (SQLException e) {
-                    System.out.println(e);
+                    System.out.println(e.getMessage());
                 }
             }
         }
-        return false;
     }
 
     @Override
@@ -226,5 +232,49 @@ public class TransactionDBActionImpl implements TransactionDBAction {
             throw new RuntimeException(e);
         }
         return false;
+    }
+
+    @Override
+    public boolean verifyTransaction(int id) {
+        Connection conn = DBConnection.connectToDB();
+        try {
+            String query = "SELECT * FROM transaction_records WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+
+            stmt.setInt(1, id);
+
+            ResultSet result = stmt.executeQuery();
+            return result.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try{
+                conn.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public boolean verifyPatient(int id) {
+        Connection conn = DBConnection.connectToDB();
+        try {
+            String query = "SELECT * FROM patients WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+
+            stmt.setInt(1, id);
+
+            ResultSet result = stmt.executeQuery();
+            return result.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try{
+                conn.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

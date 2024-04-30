@@ -14,8 +14,8 @@ public class TransactionActionImpl implements TransactionAction {
         System.out.println("Patient Age: " + transaction.getPatient().getAge());
         System.out.println("Patient Phone Number: " + transaction.getPatient().getPhoneNumber());
         System.out.println("Patient Date of Birth: " + transaction.getPatient().getDateOfBirth());
-        System.out.println("Findings: " + transaction.getFindings());
         System.out.println("Remarks: " + transaction.getRemarks());
+        System.out.println("Findings: " + transaction.getFindings());
         System.out.println("Transaction Date: " + transaction.getDate());
         System.out.println("#-------------------------------------------#");
     }
